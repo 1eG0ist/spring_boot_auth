@@ -40,12 +40,12 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
         return refreshTokenRepository.findByToken(token);
     }
 
-    public RefreshToken verifyExpiration(RefreshToken token) {
+    public Optional<RefreshToken> verifyExpiration(RefreshToken token) {
         if(token.getExpiryDate().compareTo(Instant.now())<0){
             refreshTokenRepository.delete(token);
-            throw new RuntimeException(token.getToken() + " Refresh token is expired. Please make a new login..!");
+            return Optional.empty();
         }
-        return token;
+        return Optional.of(token);
     }
 
 }

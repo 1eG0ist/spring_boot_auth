@@ -38,7 +38,7 @@ public class AuthServiceImpl implements AuthService {
 
     public ResponseEntity<?> createTokensByRefreshToken(@RequestBody RefreshTokenRequestDto refreshTokenRequestDTO){
         return refreshTokenService.findByToken(refreshTokenRequestDTO.getRefreshToken())
-                .map(refreshTokenService::verifyExpiration)
+                .flatMap(refreshTokenService::verifyExpiration)
                 .map(RefreshToken::getUserInfo)
                 .map(userInfo -> {
                     String accessToken = accessTokenService.generateToken(userService.findByEmail(userInfo.getEmail()));
